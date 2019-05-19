@@ -5,7 +5,7 @@ def create_roles(VAULT_ADDR, VAULT_TOKEN, team, team_members):
     for team_member in team_members:
         vault_url = "%s/v1/ssh-client-signer-%s/roles/%s" % (VAULT_ADDR, team, team_member)
         headers = {"X-Vault-Token": "%s" % (VAULT_TOKEN)} 
-        policy = {"allow_user_certificates":"true","allowed_users":"user","default_extensions":[{"permit-pty":""}],"key_type":"ca","default_user":"","ttl":"30m0s"}
+        policy = {"allow_user_certificates":"true","allowed_users":"","default_extensions":[{"permit-pty":""}],"key_type":"ca","default_user":"","ttl":"30m0s"}
         policy["allowed_users"] = "%s" % (team_member)
         policy_json = json.dumps(policy)
         r = requests.post(url=vault_url, headers=headers, data=policy_json)
