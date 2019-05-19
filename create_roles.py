@@ -10,7 +10,7 @@ def create_roles(VAULT_ADDR, VAULT_TOKEN, team, team_members):
         policy_json = json.dumps(policy)
         r = requests.post(url=vault_url, headers=headers, data=policy_json)
 
-# To call the above, you just need to pass the required values
+# To call the above, you just need to pass the required values.  For example:
 # create_roles("http://example-vault-addr:8200", "my-vault-token", "team-1", ["bob", "sally", "john", "jane"])
 
 
