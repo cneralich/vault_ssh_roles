@@ -12,3 +12,6 @@ def create_roles(VAULT_ADDR, VAULT_TOKEN, team, team_members):
 
 # To call the above, you just need to pass the required values
 # create_roles("http://example-vault-addr:8200", "my-vault-token", "team-1", ["bob", "sally", "john", "jane"])
+
+
+
