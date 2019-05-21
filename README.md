@@ -32,8 +32,8 @@ EOF
 
 ### 4. Users Authenticate to Vault (via preferred/configured method) and request a key signature:
 
-# SALLY
+#### SALLY
 vault write ssh-client-signer-team-1/sign/sally public_key=@$HOME/.ssh/id_rsa.pub
 
-# BOB
+#### BOB
 vault write ssh-client-signer-team-2/sign/bob public_key=@$HOME/.ssh/id_rsa.pub
