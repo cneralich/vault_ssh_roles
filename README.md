@@ -50,7 +50,7 @@ EOF
 
 ## 4. Create an Entity and Aliases for Each Team Member (docs [here](https://learn.hashicorp.com/vault/identity-access-management/iam-identity))
 
-#### Bob
+#### BOB
 
 ##### Entity
 ```
@@ -66,7 +66,7 @@ vault write identity/entity-alias name="bob-okta" \
         mount_accessor=<userpass_accessor>
 ```
 
-#### Sally
+#### SALLY
 
 ##### Entity
 ```
