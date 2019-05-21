@@ -1,5 +1,5 @@
 # VAULT SSH ROLES
-This script can be used to programmatically create SSH Roles for your team members, with proper permissions assigned.  
+These steps can be followed to setup multiple SSH Signing Engines, and the script in this repo can be used to programmatically create SSH Roles for your team members, with proper permissions assigned.  
 
 ## SETUP STEPS
 
@@ -15,7 +15,20 @@ vault secrets enable -path=ssh-client-signer-team-1 ssh
 vault secrets enable -path=ssh-client-signer-team-2 ssh
 ```
 
-## 2. Create a Templated policy per Signing Engine (i.e. one per Team)
+## 2. Configure Signing Engines with a CA for signing client keys (can use an existing keypair or Vault can generate a keypair for you)
+
+
+#### TEAM 1
+```
+vault write ssh-client-signer-team-1/config/ca generate_signing_key=true
+```
+
+#### TEAM 2
+```
+vault write ssh-client-signer-team-2/config/ca generate_signing_key=true
+```
+
+## 3. Create a Templated policy per Signing Engine (i.e. one per Team)
 
 #### team-1-ssh.hcl
 ```
@@ -35,7 +48,7 @@ path "ssh-client-signer-team-2/sign/{{identity.entity.name}}" {
 EOF
 ```
 
-## 3. Create an Entity and Aliases for Each Team Member (docs [here](https://learn.hashicorp.com/vault/identity-access-management/iam-identity))
+## 4. Create an Entity and Aliases for Each Team Member (docs [here](https://learn.hashicorp.com/vault/identity-access-management/iam-identity))
 
 #### Bob
 
@@ -69,10 +82,10 @@ vault write identity/entity-alias name="sally-okta" \
         mount_accessor=<userpass_accessor>
 ```
 
-## 4. Create a Role per User per Team
+## 5. Create a Role per User per Team
 Run the create_roles.py script and pass in all team names and members, accordingly.
 
-## 5. Users Authenticate to Vault (via preferred/configured method) and request a key signature:
+## 6. Users Authenticate to Vault (via preferred/configured method) and request a key signature:
 
 #### BOB
 ```
