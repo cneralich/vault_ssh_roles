@@ -5,10 +5,10 @@ This script can be used to programmatically create SSH Roles for your team membe
 
 ## 1. Create separate signing engines (One per team)
 
-### TEAM 1
+#### TEAM 1
 vault secrets enable -path=ssh-client-signer-team-1 ssh
 
-### TEAM 2
+#### TEAM 2
 vault secrets enable -path=ssh-client-signer-team-2 ssh
 
 ## 2. Create a Role per User per Team
