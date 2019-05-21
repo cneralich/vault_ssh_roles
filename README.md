@@ -19,7 +19,7 @@ vault secrets enable -path=ssh-client-signer-team-2 ssh
 ```
 vault write identity/entity name="bob" policies="base" \
         metadata=organization="ACME Inc." \
-        metadata=team="QA"
+        metadata=team="Team-1"
  ```
    
 ##### Alias (One per Auth Method)
@@ -35,7 +35,7 @@ vault write identity/entity-alias name="bob-okta" \
 ```
 vault write identity/entity name="sally" policies="base" \
         metadata=organization="ACME Inc." \
-        metadata=team="QA"
+        metadata=team="Team-2"
  ```
    
 ##### Alias (One per Auth Method)
