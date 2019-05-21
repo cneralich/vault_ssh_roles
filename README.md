@@ -11,13 +11,31 @@ vault secrets enable -path=ssh-client-signer-team-1 ssh
 #### TEAM 2
 vault secrets enable -path=ssh-client-signer-team-2 ssh
 
-## 2. Create an Entity and Aliases for Each Team Member (docs [here](https://learn.hashicorp.com/vault/identity-access-management/iam-identity))
+## 2. Create a Templated policy per Signing Engine (i.e. one per Team)
+
+#### team-1-ssh.hcl
+```
+path "ssh-client-signer-team-1/sign/{{identity.entity.name}}" {
+    capabilities = ["create","update"]
+}
+EOF
+```
+
+#### team-2-ssh.hcl
+```
+path "ssh-client-signer-team-2/sign/{{identity.entity.name}}" {
+    capabilities = ["create","update"]
+}
+EOF
+```
+
+## 3. Create an Entity and Aliases for Each Team Member (docs [here](https://learn.hashicorp.com/vault/identity-access-management/iam-identity))
 
 #### Bob
 
 ##### Entity
 ```
-vault write identity/entity name="bob" policies="base" \
+vault write identity/entity name="bob" policies="team-1-ssh" \
         metadata=organization="ACME Inc." \
         metadata=team="Team-1"
  ```
@@ -33,7 +51,7 @@ vault write identity/entity-alias name="bob-okta" \
 
 ##### Entity
 ```
-vault write identity/entity name="sally" policies="base" \
+vault write identity/entity name="sally" policies="team-2-ssh" \
         metadata=organization="ACME Inc." \
         metadata=team="Team-2"
  ```
@@ -45,24 +63,8 @@ vault write identity/entity-alias name="sally-okta" \
         mount_accessor=<userpass_accessor>
 ```
 
-## 3. Create a Role per User per Team
+## 4. Create a Role per User per Team
 Run the create_roles.py script and pass in all team names and members, accordingly.
-
-## 4. Create a Templated policy per Signing Engine (i.e. one per Team)
-
-```
-path "ssh-client-signer-team-1/sign/{{identity.entity.name}}" {
-    capabilities = ["create","update"]
-}
-EOF
-```
-
-```
-path "ssh-client-signer-team-2/sign/{{identity.entity.name}}" {
-    capabilities = ["create","update"]
-}
-EOF
-```
 
 ## 5. Users Authenticate to Vault (via preferred/configured method) and request a key signature:
 
