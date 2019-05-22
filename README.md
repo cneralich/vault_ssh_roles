@@ -85,14 +85,14 @@ vault write identity/entity-alias name="sally-okta" \
 ## 5. Create a Role per User per Team
 Run the create_roles.py script and pass in all team names and members, accordingly.
 
-## 6. Users Authenticate to Vault (via preferred/configured method) and request a key signature:
+## 6. Users Authenticate to Vault (via preferred/configured method), request a key signature, and save signed key to disk:
 
 #### BOB
 ```
-vault write ssh-client-signer-team-1/sign/bob public_key=@$HOME/.ssh/id_rsa.pub
+vault write -field=signed_key ssh-client-signer-team-1/sign/bob public_key=@$HOME/.ssh/id_rsa.pub > signed-cert.pub
 ```
 
 #### SALLY
 ```
-vault write ssh-client-signer-team-2/sign/sally public_key=@$HOME/.ssh/id_rsa.pub
+vault write -field=signed_key ssh-client-signer-team-2/sign/sally public_key=@$HOME/.ssh/id_rsa.pub > signed-cert.pub
 ```
