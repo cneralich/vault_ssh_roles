@@ -28,7 +28,27 @@ vault write ssh-client-signer-team-1/config/ca generate_signing_key=true
 vault write ssh-client-signer-team-2/config/ca generate_signing_key=true
 ```
 
-## 3. Create a Templated policy per Signing Engine (i.e. one per Team)
+## 3. Add the public key to all target host's SSH configuration
+
+#### TEAM 1
+```
+curl -o /etc/ssh/trusted-user-ca-keys-team-1.pem <YOUR_VAULT_ADDR>/v1/ssh-client-signer-team-1/public_key
+```
+
+```
+TrustedUserCAKeys /etc/ssh/trusted-user-ca-keys-team-1.pem
+```
+
+#### TEAM 2
+```
+curl -o /etc/ssh/trusted-user-ca-keys-team-2.pem <YOUR_VAULT_ADDR>/v1/ssh-client-signer-team-2/public_key
+```
+
+```
+TrustedUserCAKeys /etc/ssh/trusted-user-ca-keys-team-2.pem
+```
+
+## 4. Create a Templated policy per Signing Engine (i.e. one per Team)
 
 #### team-1-ssh.hcl
 ```
@@ -48,7 +68,7 @@ path "ssh-client-signer-team-2/sign/{{identity.entity.name}}" {
 EOF
 ```
 
-## 4. Create an Entity and Aliases for Each Team Member (docs [here](https://learn.hashicorp.com/vault/identity-access-management/iam-identity))
+## 5. Create an Entity and Aliases for Each Team Member (docs [here](https://learn.hashicorp.com/vault/identity-access-management/iam-identity))
 
 #### BOB
 
@@ -82,10 +102,10 @@ vault write identity/entity-alias name="sally-okta" \
         mount_accessor=<userpass_accessor>
 ```
 
-## 5. Create a Role per User per Team
+## 6. Create a Role per User per Team
 Run the create_roles.py script and pass in all team names and members, accordingly.
 
-## 6. Users Authenticate to Vault (via preferred/configured method), request a key signature, and save signed key to disk:
+## 7. Users Authenticate to Vault (via preferred/configured method), request a key signature, and save signed key to disk:
 
 #### BOB
 ```
@@ -96,3 +116,16 @@ vault write -field=signed_key ssh-client-signer-team-1/sign/bob public_key=@$HOM
 ```
 vault write -field=signed_key ssh-client-signer-team-2/sign/sally public_key=@$HOME/.ssh/id_rsa.pub > signed-cert.pub
 ```
+
+## 8. Users use signed keys to SSH into Target Machine
+
+#### BOB
+```
+ssh -i signed-cert.pub -i ~/.ssh/id_rsa bob@example.com
+```
+
+#### SALLY
+```
+ssh -i signed-cert.pub -i ~/.ssh/id_rsa sally@example.com
+```
+
