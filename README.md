@@ -31,24 +31,26 @@ vault write ssh-client-signer-team-2/config/ca generate_signing_key=true
 ## 3. Add the public key to all target host's SSH configuration
 
 #### TEAM 1
-##### From the Target Machine
+##### 1) From the Target Machine
 ```
 curl -o /etc/ssh/trusted-user-ca-keys-team-1.pem <YOUR_VAULT_ADDR>/v1/ssh-client-signer-team-1/public_key
 ```
-##### Add TrustedUserCAKeys /etc/ssh/trusted-user-ca-keys-team-1.pem to /etc/ssh/sshd_config
+##### 2) Add TrustedUserCAKeys /etc/ssh/trusted-user-ca-keys-team-1.pem to /etc/ssh/sshd_config
 ```
 TrustedUserCAKeys /etc/ssh/trusted-user-ca-keys-team-1.pem
 ```
-##### Restart SSH -> service ssh restart, service sshd restart
+##### 3) Restart SSH -> service ssh restart, service sshd restart
 
 #### TEAM 2
+##### 1) From the Target Machine
 ```
 curl -o /etc/ssh/trusted-user-ca-keys-team-2.pem <YOUR_VAULT_ADDR>/v1/ssh-client-signer-team-2/public_key
 ```
-
+##### 2) Add TrustedUserCAKeys /etc/ssh/trusted-user-ca-keys-team-2.pem to /etc/ssh/sshd_config
 ```
 TrustedUserCAKeys /etc/ssh/trusted-user-ca-keys-team-2.pem
 ```
+##### 3) Restart SSH -> service ssh restart, service sshd restart
 
 ## 4. Create a Templated policy per Signing Engine (i.e. one per Team)
 
