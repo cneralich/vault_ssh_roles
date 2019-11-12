@@ -113,12 +113,12 @@ Run the create_roles.py script and pass in all team names and members, according
 
 #### BOB
 ```
-vault write -field=signed_key ssh-client-signer-team-1/sign/bob public_key=@$HOME/.ssh/id_rsa.pub > signed-cert.pub
+vault write -field=signed_key ssh-client-signer-team-1/sign/bob public_key=@$HOME/.ssh/id_rsa.pub valid_principals="bob"  > signed-cert.pub
 ```
 
 #### SALLY
 ```
-vault write -field=signed_key ssh-client-signer-team-2/sign/sally public_key=@$HOME/.ssh/id_rsa.pub > signed-cert.pub
+vault write -field=signed_key ssh-client-signer-team-2/sign/sally public_key=@$HOME/.ssh/id_rsa.pub valid_principals="sally" > signed-cert.pub
 ```
 
 ## 8. Users use signed keys to SSH into Target Machine
